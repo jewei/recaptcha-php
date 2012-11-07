@@ -70,7 +70,8 @@ function _recaptcha_http_post($host, $path, $data, $port = 80) {
 	if( function_exists('curl_init') )
 	{
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, 'http://'.$host.$path);
+		curl_setopt($ch, CURLOPT_URL, $host.$path);
+		curl_setopt($ch, CURLOPT_PORT, $port);
 		curl_setopt($ch, CURLOPT_POST, true );
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
