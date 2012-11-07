@@ -1,7 +1,7 @@
-recaptcha-php
+reCAPTCHA PHP library
 =============
 
-reCAPTCHA PHP library
+The reCAPTCHA PHP Lirary helps you use the reCAPTCHA API.
 http://www.google.com/recaptcha/captcha
 
 Fork from Google code as there is no maintenance for 5 years
@@ -9,4 +9,5 @@ Fork from Google code as there is no maintenance for 5 years
 
 Documentation
 -------------
+Documentation for this library can be found at
 https://developers.google.com/recaptcha/docs/php
