@@ -1,4 +1,9 @@
 <?php
+/**
+ * @author      Jewei Mak <jewei.mak@gmail.com>
+ * @copyright   Copyright (C) 2012 Jewei Mak. All rights reserved.
+ * @license     GNU General Public License version 2 or later;
+ */
 /*
  * This is a PHP library that handles calling reCAPTCHA.
  *    - Documentation and latest version
