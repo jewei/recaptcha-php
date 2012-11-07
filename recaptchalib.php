@@ -65,7 +65,7 @@ function _recaptcha_qsencode ($data) {
  * @param string $host
  * @param string $path
  * @param array $data
- * @param int port
+ * @param int $port
  * @return array response
  */
 function _recaptcha_http_post($host, $path, $data, $port = 80) {
