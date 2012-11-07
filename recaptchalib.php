@@ -82,7 +82,8 @@ function _recaptcha_http_post($host, $path, $data, $port = 80) {
 		curl_close($ch);
 
 		if( $result === false ) {
-			die ('CURL execution failed');
+			// CURL execution failed
+			return false;
 		}
 
 		$response = preg_split("/[\s]+/", $result);
@@ -100,7 +101,8 @@ function _recaptcha_http_post($host, $path, $data, $port = 80) {
 
 	$response = '';
 	if( false == ( $fs = @fsockopen($host, $port, $errno, $errstr, 10) ) ) {
-		die ('Could not open socket');
+		// Could not open socket
+		return false;
 	}
 
 	fwrite($fs, $http_request);
@@ -127,7 +129,8 @@ function _recaptcha_http_post($host, $path, $data, $port = 80) {
  */
 function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false) {
 ﻿	if ($pubkey == null || $pubkey == '') {
-﻿	﻿	die ("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>");
+		// To use reCAPTCHA you must get an API key from https://www.google.com/recaptcha/admin/create
+		return false;
 ﻿	}
 ﻿
 ﻿	if ($use_ssl) {
@@ -168,11 +171,13 @@ class ReCaptchaResponse {
  */
 function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $extra_params = array()) {
 ﻿	if ($privkey == null || $privkey == '') {
-﻿	﻿	die ("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>");
+		// To use reCAPTCHA you must get an API key from https://www.google.com/recaptcha/admin/create
+		return false;
 ﻿	}
 
 ﻿	if ($remoteip == null || $remoteip == '') {
-﻿	﻿	die ("For security reasons, you must pass the remote ip to reCAPTCHA");
+		// For security reasons, you must pass the remote ip to reCAPTCHA
+		return false;
 ﻿	}
 
 	//discard spam submissions
@@ -224,9 +229,11 @@ function _recaptcha_aes_pad($val) {
 
 /* Mailhide related code */
 function _recaptcha_aes_encrypt($val,$ky) {
-﻿	if (! function_exists ("mcrypt_encrypt")) {
-﻿	﻿	die ("To use reCAPTCHA Mailhide, you need to have the mcrypt php module installed.");
+﻿	if (!function_exists ("mcrypt_encrypt")) {
+		// To use reCAPTCHA Mailhide, you need to have the mcrypt php module installed.
+		return false;
 ﻿	}
+
 ﻿	$mode=MCRYPT_MODE_CBC;
 ﻿	$enc=MCRYPT_RIJNDAEL_128;
 ﻿	$val=_recaptcha_aes_pad($val);
@@ -240,8 +247,9 @@ function _recaptcha_mailhide_urlbase64 ($x) {
 /* gets the reCAPTCHA Mailhide url for a given email, public key and private key */
 function recaptcha_mailhide_url($pubkey, $privkey, $email) {
 ﻿	if ($pubkey == '' || $pubkey == null || $privkey == "" || $privkey == null) {
-﻿		die ("To use reCAPTCHA Mailhide, you have to sign up for a public and private key, " .
-﻿			"you can do so at <a href='http://www.google.com/recaptcha/mailhide/apikey'>http://www.google.com/recaptcha/mailhide/apikey</a>");
+		// To use reCAPTCHA Mailhide, you have to sign up for a public and private key
+		// you can do so at http://www.google.com/recaptcha/mailhide/apikey
+		return false;
 ﻿	}
 
 ﻿	$ky = pack('H*', $privkey);
