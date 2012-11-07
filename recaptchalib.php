@@ -46,11 +46,12 @@ define("RECAPTCHA_VERIFY_SERVER", "www.google.com");
  */
 function _recaptcha_qsencode ($data) {
 	$req = "";
-	foreach ( $data as $key => $value )
+	foreach ( $data as $key => $value ) {
 		$req .= $key . '=' . urlencode( stripslashes($value) ) . '&';
+	}
 
 	// Cut the last '&'
-	$req=substr($req,0,strlen($req)-1);
+	$req = substr($req,0,strlen($req)-1);
 	return $req;
 }
 
@@ -64,7 +65,30 @@ function _recaptcha_qsencode ($data) {
  */
 function _recaptcha_http_post($host, $path, $data, $port = 80) {
 
-	$req = _recaptcha_qsencode ($data);
+	$req = _recaptcha_qsencode($data);
+
+	if( function_exists('curl_init') )
+	{
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, 'http://'.$host.$path);
+		curl_setopt($ch, CURLOPT_POST, true );
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+		$result = curl_exec( $ch );
+		curl_close($ch);
+
+		if( $result === false ) {
+			die ('CURL execution failed');
+		}
+
+		$response = preg_split("/[\s]+/", $result);
+
+		return $response;
+	}
 
 	$http_request  = "POST $path HTTP/1.0\r\n";
 	$http_request .= "Host: $host\r\n";
@@ -76,13 +100,15 @@ function _recaptcha_http_post($host, $path, $data, $port = 80) {
 
 	$response = '';
 	if( false == ( $fs = @fsockopen($host, $port, $errno, $errstr, 10) ) ) {
-					die ('Could not open socket');
+		die ('Could not open socket');
 	}
 
 	fwrite($fs, $http_request);
 
-	while ( !feof($fs) )
+	while( !feof($fs) ) {
 		$response .= fgets($fs, 1160); // One TCP-IP packet
+	}
+
 	fclose($fs);
 	$response = explode("\r\n\r\n", $response, 2);
 
